@@ -14,6 +14,8 @@ class MapViewController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
     
+    let service = LocationService()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -41,6 +43,10 @@ class MapViewController: UIViewController {
         searchTextField.layer.shadowRadius = 1
         searchTextField.layer.shadowColor = UIColor.black.cgColor
         searchTextField.layer.shadowOffset = .zero
+    }
+    
+    private func setUpMap() {
+        let usersLocation = service.getLocation()
         
         
     }
