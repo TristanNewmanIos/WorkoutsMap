@@ -16,9 +16,13 @@ class MapViewController: UIViewController {
     
     let service = LocationService()
     
+    var usersLocation: Place {
+        return service.getLocation()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
         setUpView()
     }
     
@@ -28,6 +32,7 @@ class MapViewController: UIViewController {
     
     private func setUpView() {
         setUpSearchBox()
+        setUpMap()
     }
     
     private func setUpSearchBox() {
@@ -46,9 +51,7 @@ class MapViewController: UIViewController {
     }
     
     private func setUpMap() {
-        let usersLocation = service.getLocation()
-        
-        
+        mapView.showsUserLocation = true
     }
 
 }

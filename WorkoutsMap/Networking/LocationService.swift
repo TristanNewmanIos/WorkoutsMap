@@ -23,6 +23,7 @@ class LocationService: NSObject {
             latitude: Double(locationManager.location?.coordinate.latitude ?? .zero),
             longitude: Double(locationManager.location?.coordinate.longitude ?? .zero),
             name: nil
+        )
     }
     
     func getPlacesByDistance(latitude: Double, longitude: Double, radius: Int) {
