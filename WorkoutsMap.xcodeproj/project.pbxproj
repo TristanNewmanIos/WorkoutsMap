@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		24F2704125559D1900897C21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2704025559D1900897C21 /* AppDelegate.swift */; };
 		24F2704325559D1900897C21 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2704225559D1900897C21 /* SceneDelegate.swift */; };
-		24F2704525559D1900897C21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2704425559D1900897C21 /* ViewController.swift */; };
-		24F2704825559D1900897C21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24F2704625559D1900897C21 /* Main.storyboard */; };
+		24F2704525559D1900897C21 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2704425559D1900897C21 /* MapViewController.swift */; };
+		24F2704825559D1900897C21 /* MapView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24F2704625559D1900897C21 /* MapView.storyboard */; };
 		24F2704A25559D1C00897C21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24F2704925559D1C00897C21 /* Assets.xcassets */; };
 		24F2704D25559D1C00897C21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24F2704B25559D1C00897C21 /* LaunchScreen.storyboard */; };
 		24F2705825559D1D00897C21 /* WorkoutsMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2705725559D1D00897C21 /* WorkoutsMapTests.swift */; };
 		24F2706325559D1D00897C21 /* WorkoutsMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2706225559D1D00897C21 /* WorkoutsMapUITests.swift */; };
+		24F270892555BCC800897C21 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F270882555BCC800897C21 /* Place.swift */; };
+		24F2708E2555BF2300897C21 /* SearchByDistanceResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2708D2555BF2300897C21 /* SearchByDistanceResponseObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,8 +40,8 @@
 		24F2703D25559D1900897C21 /* WorkoutsMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutsMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F2704025559D1900897C21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		24F2704225559D1900897C21 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		24F2704425559D1900897C21 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		24F2704725559D1900897C21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		24F2704425559D1900897C21 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		24F2704725559D1900897C21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MapView.storyboard; sourceTree = "<group>"; };
 		24F2704925559D1C00897C21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		24F2704C25559D1C00897C21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		24F2704E25559D1C00897C21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +51,8 @@
 		24F2705E25559D1D00897C21 /* WorkoutsMapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutsMapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F2706225559D1D00897C21 /* WorkoutsMapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsMapUITests.swift; sourceTree = "<group>"; };
 		24F2706425559D1D00897C21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24F270882555BCC800897C21 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		24F2708D2555BF2300897C21 /* SearchByDistanceResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchByDistanceResponseObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +103,10 @@
 		24F2703F25559D1900897C21 /* WorkoutsMap */ = {
 			isa = PBXGroup;
 			children = (
-				24F2704025559D1900897C21 /* AppDelegate.swift */,
-				24F2704225559D1900897C21 /* SceneDelegate.swift */,
-				24F2704425559D1900897C21 /* ViewController.swift */,
-				24F2704625559D1900897C21 /* Main.storyboard */,
+				24F270742555A3FC00897C21 /* AppDelegate */,
+				24F270732555A3F300897C21 /* Map */,
+				24F270872555BCAC00897C21 /* Model */,
 				24F2704925559D1C00897C21 /* Assets.xcassets */,
-				24F2704B25559D1C00897C21 /* LaunchScreen.storyboard */,
-				24F2704E25559D1C00897C21 /* Info.plist */,
 			);
 			path = WorkoutsMap;
 			sourceTree = "<group>";
@@ -126,6 +127,35 @@
 				24F2706425559D1D00897C21 /* Info.plist */,
 			);
 			path = WorkoutsMapUITests;
+			sourceTree = "<group>";
+		};
+		24F270732555A3F300897C21 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				24F2704425559D1900897C21 /* MapViewController.swift */,
+				24F2704625559D1900897C21 /* MapView.storyboard */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		24F270742555A3FC00897C21 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				24F2704025559D1900897C21 /* AppDelegate.swift */,
+				24F2704225559D1900897C21 /* SceneDelegate.swift */,
+				24F2704B25559D1C00897C21 /* LaunchScreen.storyboard */,
+				24F2704E25559D1C00897C21 /* Info.plist */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		24F270872555BCAC00897C21 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				24F270882555BCC800897C21 /* Place.swift */,
+				24F2708D2555BF2300897C21 /* SearchByDistanceResponseObject.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +263,7 @@
 			files = (
 				24F2704D25559D1C00897C21 /* LaunchScreen.storyboard in Resources */,
 				24F2704A25559D1C00897C21 /* Assets.xcassets in Resources */,
-				24F2704825559D1900897C21 /* Main.storyboard in Resources */,
+				24F2704825559D1900897C21 /* MapView.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,9 +288,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24F2704525559D1900897C21 /* ViewController.swift in Sources */,
+				24F2704525559D1900897C21 /* MapViewController.swift in Sources */,
 				24F2704125559D1900897C21 /* AppDelegate.swift in Sources */,
+				24F2708E2555BF2300897C21 /* SearchByDistanceResponseObject.swift in Sources */,
 				24F2704325559D1900897C21 /* SceneDelegate.swift in Sources */,
+				24F270892555BCC800897C21 /* Place.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,12 +328,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		24F2704625559D1900897C21 /* Main.storyboard */ = {
+		24F2704625559D1900897C21 /* MapView.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				24F2704725559D1900897C21 /* Base */,
 			);
-			name = Main.storyboard;
+			name = MapView.storyboard;
 			sourceTree = "<group>";
 		};
 		24F2704B25559D1C00897C21 /* LaunchScreen.storyboard */ = {
@@ -438,7 +470,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HL3TG6P8PX;
-				INFOPLIST_FILE = WorkoutsMap/Info.plist;
+				INFOPLIST_FILE = WorkoutsMap/AppDelegate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -457,7 +489,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HL3TG6P8PX;
-				INFOPLIST_FILE = WorkoutsMap/Info.plist;
+				INFOPLIST_FILE = WorkoutsMap/AppDelegate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
