@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		24E5A00A255829720022A05D /* WMRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5A009255829720022A05D /* WMRequests.swift */; };
 		24F2704125559D1900897C21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2704025559D1900897C21 /* AppDelegate.swift */; };
 		24F2704325559D1900897C21 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2704225559D1900897C21 /* SceneDelegate.swift */; };
 		24F2704525559D1900897C21 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2704425559D1900897C21 /* MapViewController.swift */; };
@@ -44,7 +43,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		24E5A009255829720022A05D /* WMRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WMRequests.swift; sourceTree = "<group>"; };
 		24F2703D25559D1900897C21 /* WorkoutsMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutsMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F2704025559D1900897C21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		24F2704225559D1900897C21 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -139,7 +137,6 @@
 			isa = PBXGroup;
 			children = (
 				24E5A008255829520022A05D /* Services */,
-				24F270CA2555CF8C00897C21 /* Networking */,
 				24F270742555A3FC00897C21 /* AppDelegate */,
 				24F270732555A3F300897C21 /* Map */,
 				24F270872555BCAC00897C21 /* Model */,
@@ -193,14 +190,6 @@
 				24F2708D2555BF2300897C21 /* SearchByDistanceResponseObject.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		24F270CA2555CF8C00897C21 /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				24E5A009255829720022A05D /* WMRequests.swift */,
-			);
-			path = Networking;
 			sourceTree = "<group>";
 		};
 		891F08E3095E1E21C452700E /* Frameworks */ = {
@@ -470,7 +459,6 @@
 				24F2704125559D1900897C21 /* AppDelegate.swift in Sources */,
 				24F2708E2555BF2300897C21 /* SearchByDistanceResponseObject.swift in Sources */,
 				24F2704325559D1900897C21 /* SceneDelegate.swift in Sources */,
-				24E5A00A255829720022A05D /* WMRequests.swift in Sources */,
 				24F270CC2555CFCB00897C21 /* LocationService.swift in Sources */,
 				24F270892555BCC800897C21 /* Place.swift in Sources */,
 			);
