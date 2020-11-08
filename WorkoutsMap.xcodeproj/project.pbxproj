@@ -19,6 +19,7 @@
 		24F2708E2555BF2300897C21 /* SearchByDistanceResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F2708D2555BF2300897C21 /* SearchByDistanceResponseObject.swift */; };
 		24F270932555C5DC00897C21 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 24F270922555C5DC00897C21 /* Podfile */; };
 		24F270AE2555C8CD00897C21 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 24F270AD2555C8CD00897C21 /* .gitignore */; };
+		24F270CC2555CFCB00897C21 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F270CB2555CFCB00897C21 /* LocationService.swift */; };
 		3E9A9328A0BCA136CE6D6B93 /* Pods_WorkoutsMap_WorkoutsMapUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC30ED3F1A44D59ACB7C7EE5 /* Pods_WorkoutsMap_WorkoutsMapUITests.framework */; };
 		A000079BB5DC514E6C8350D2 /* Pods_WorkoutsMapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6690A3EFB41CB1D06D4409F /* Pods_WorkoutsMapTests.framework */; };
 		A564AC54C083C42327CCD887 /* Pods_WorkoutsMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72399954245282113D6685F6 /* Pods_WorkoutsMap.framework */; };
@@ -60,6 +61,7 @@
 		24F2708D2555BF2300897C21 /* SearchByDistanceResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchByDistanceResponseObject.swift; sourceTree = "<group>"; };
 		24F270922555C5DC00897C21 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		24F270AD2555C8CD00897C21 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		24F270CB2555CFCB00897C21 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		31A8F8733218C5C0CCF823B8 /* Pods-WorkoutsMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WorkoutsMap.release.xcconfig"; path = "Target Support Files/Pods-WorkoutsMap/Pods-WorkoutsMap.release.xcconfig"; sourceTree = "<group>"; };
 		534F28B6ECF6666F199D8145 /* Pods-WorkoutsMapTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WorkoutsMapTests.debug.xcconfig"; path = "Target Support Files/Pods-WorkoutsMapTests/Pods-WorkoutsMapTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A84D5C3D9A33AE896C3DEEA /* Pods-WorkoutsMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WorkoutsMap.debug.xcconfig"; path = "Target Support Files/Pods-WorkoutsMap/Pods-WorkoutsMap.debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,6 +101,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		24E5A008255829520022A05D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				24F270CB2555CFCB00897C21 /* LocationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		24F2703425559D1900897C21 = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +136,7 @@
 		24F2703F25559D1900897C21 /* WorkoutsMap */ = {
 			isa = PBXGroup;
 			children = (
+				24E5A008255829520022A05D /* Services */,
 				24F270742555A3FC00897C21 /* AppDelegate */,
 				24F270732555A3F300897C21 /* Map */,
 				24F270872555BCAC00897C21 /* Model */,
@@ -448,6 +459,7 @@
 				24F2704125559D1900897C21 /* AppDelegate.swift in Sources */,
 				24F2708E2555BF2300897C21 /* SearchByDistanceResponseObject.swift in Sources */,
 				24F2704325559D1900897C21 /* SceneDelegate.swift in Sources */,
+				24F270CC2555CFCB00897C21 /* LocationService.swift in Sources */,
 				24F270892555BCC800897C21 /* Place.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -554,7 +566,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -609,7 +621,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -628,6 +640,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HL3TG6P8PX;
 				INFOPLIST_FILE = WorkoutsMap/AppDelegate/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -648,6 +661,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HL3TG6P8PX;
 				INFOPLIST_FILE = WorkoutsMap/AppDelegate/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

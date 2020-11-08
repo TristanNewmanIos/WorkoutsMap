@@ -1,0 +1,68 @@
+//
+//  LocationService.swift
+//  WorkoutsMap
+//
+//  Created by Tristan Newman on 11/6/20.
+//
+
+import Foundation
+import Alamofire
+import CoreLocation
+
+class LocationService: NSObject {
+    
+    let locationManager = CLLocationManager()
+    var usersLocation: Place? {
+        return getLocation()
+    }
+    
+    let baseURLString = "https://stagingapi.campgladiator.com/api/v2"
+    var getPlacesByDistanceExtension = "/places/searchbydistance?"
+    
+    override init() {
+        super.init()
+        
+        // Set up
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        // Location permissions
+        locationManager.requestWhenInUseAuthorization()
+    }
+    
+    func getLocation() -> Place? {
+        locationManager.startUpdatingLocation()
+        
+        if let location = locationManager.location?.coordinate {
+           return Place(
+                latitude: Double(location.latitude),
+                longitude: Double(location.longitude),
+                name: nil
+            )
+        }
+        
+        return nil
+    }
+    
+    func getPlacesByDistance(radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
+        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=\(usersLocation?.latitude)&lon=\(usersLocation?.longitude)&radius=\(radius)"
+        
+        AF.request(requestURLString).validate().responseJSON { response in
+            completion(response.result)
+        }
+        
+    }
+    
+    func getDemoPlacesByDistance(radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
+        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=30.406991&lon=-97.720310&radius=\(radius)"
+        
+        AF.request(requestURLString).validate().responseJSON { response in
+            completion(response.result)
+        }
+        
+    }
+}
+
+extension LocationService: CLLocationManagerDelegate {
+    
+}

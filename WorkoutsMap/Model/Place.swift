@@ -10,7 +10,7 @@ import Foundation
 struct Place: Codable {
     var longitude: Double
     var latitude: Double
-    var name: String
+    var name: String?
     
     enum KeyValue: String {
         case latitude = "placeLatitude"
@@ -21,6 +21,12 @@ struct Place: Codable {
     init(json: [String: Any?]) {
         latitude = json[KeyValue.latitude.rawValue] as? Double ?? .zero
         longitude = json[KeyValue.longitude.rawValue] as? Double ?? .zero
-        name = json[KeyValue.name.rawValue] as? String ?? ""
+        name = json[KeyValue.name.rawValue] as? String
+    }
+    
+    init(latitude: Double, longitude: Double, name: String?) {
+        self.longitude = longitude
+        self.latitude = latitude
+        self.name = name
     }
 }
