@@ -10,23 +10,41 @@ import Alamofire
 import CoreLocation
 
 class LocationService: NSObject {
-    func getLocation() -> Place {
+    
+    typealias CompletionHandler = (_ success: Bool) -> Void
+    
+    let locationManager = CLLocationManager()
+    let baseURLString = "https://stagingapi.campgladiator.com/api/v2/places/searchbydistance?lat=30.406991&lon=-97.720310&radius=25"
+    
+    override init() {
+        super.init()
+        
         // Set up
-        let locationManager = CLLocationManager()
-        locationManager.requestAlwaysAuthorization()
-        locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        // Location permissions
+        locationManager.requestWhenInUseAuthorization()
+    }
+    
+    func getLocation() -> Place? {
         locationManager.startUpdatingLocation()
         
-        return Place(
-            latitude: Double(locationManager.location?.coordinate.latitude ?? .zero),
-            longitude: Double(locationManager.location?.coordinate.longitude ?? .zero),
-            name: nil
-        )
+        if let location = locationManager.location?.coordinate {
+           return Place(
+                latitude: Double(location.latitude),
+                longitude: Double(location.longitude),
+                name: nil
+            )
+        }
+        
+        return nil
     }
     
     func getPlacesByDistance(latitude: Double, longitude: Double, radius: Int) {
+        AF.request(baseURLString).validate().responseJSON { response in
+            print("response data: ", response)
+        }
         
     }
 }

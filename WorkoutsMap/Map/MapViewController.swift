@@ -16,18 +16,20 @@ class MapViewController: UIViewController {
     
     let service = LocationService()
     
-    var usersLocation: Place {
+    var usersLocation: Place? {
         return service.getLocation()
     }
+    var workoutLocations: [Place] = []
+    var locationRadius = 2 //miles
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        createMapData()
         setUpView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        searchTextField.becomeFirstResponder()
     }
     
     private func setUpView() {
@@ -48,10 +50,18 @@ class MapViewController: UIViewController {
         searchTextField.layer.shadowRadius = 1
         searchTextField.layer.shadowColor = UIColor.black.cgColor
         searchTextField.layer.shadowOffset = .zero
+        
+        searchTextField.becomeFirstResponder()
     }
     
     private func setUpMap() {
         mapView.showsUserLocation = true
+    }
+    
+    // MARK: Networking
+    private func createMapData() {
+        service.getPlacesByDistance(latitude: 2.0, longitude: 2.0, radius: 2)
+        
     }
 
 }
