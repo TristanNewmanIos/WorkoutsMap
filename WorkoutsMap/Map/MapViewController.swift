@@ -15,10 +15,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     
     let service = LocationService()
-    
-    var usersLocation: Place? {
-        return service.getLocation()
-    }
+    var getPlacesResponse: SearchByDistanceResponseObject?
     var workoutLocations: [Place] = []
     var locationRadius = 2 //miles
     
@@ -58,10 +55,37 @@ class MapViewController: UIViewController {
         mapView.showsUserLocation = true
     }
     
-    // MARK: Networking
+    // MARK: Data Processing
     private func createMapData() {
-        service.getPlacesByDistance(latitude: 2.0, longitude: 2.0, radius: 2)
+        getMapData()
         
+    }
+    
+    // MARK: Networking
+    private func getMapData() {
+
+        let group = DispatchGroup()
+        
+        group.enter()
+        // service.getPlacesByDistance(radius: locationRadius)
+        // TODO: Switch to normal get request before prod
+        service.getDemoPlacesByDistance(radius: 25) { result in
+            switch result {
+            case .success(let value):
+                print(value)
+                self.getPlacesResponse = SearchByDistanceResponseObject(responseData: value)
+            case .failure(let error):
+                print(error)
+            }
+            
+            group.leave()
+        }
+        
+        DispatchQueue.main.async {
+            if let workoutPlaces = self.getPlacesResponse?.places {
+                self.workoutLocations = workoutPlaces
+            }
+        }
     }
 
 }

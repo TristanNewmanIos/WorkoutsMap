@@ -11,10 +11,13 @@ import CoreLocation
 
 class LocationService: NSObject {
     
-    typealias CompletionHandler = (_ success: Bool) -> Void
-    
     let locationManager = CLLocationManager()
-    let baseURLString = "https://stagingapi.campgladiator.com/api/v2/places/searchbydistance?lat=30.406991&lon=-97.720310&radius=25"
+    var usersLocation: Place? {
+        return getLocation()
+    }
+    
+    let baseURLString = "https://stagingapi.campgladiator.com/api/v2"
+    var getPlacesByDistanceExtension = "/places/searchbydistance?"
     
     override init() {
         super.init()
@@ -41,9 +44,20 @@ class LocationService: NSObject {
         return nil
     }
     
-    func getPlacesByDistance(latitude: Double, longitude: Double, radius: Int) {
-        AF.request(baseURLString).validate().responseJSON { response in
-            print("response data: ", response)
+    func getPlacesByDistance(radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
+        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=\(usersLocation?.latitude)&lon=\(usersLocation?.longitude)&radius=\(radius)"
+        
+        AF.request(requestURLString).validate().responseJSON { response in
+            completion(response.result)
+        }
+        
+    }
+    
+    func getDemoPlacesByDistance(radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
+        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=30.406991&lon=-97.720310&radius=\(radius)"
+        
+        AF.request(requestURLString).validate().responseJSON { response in
+            completion(response.result)
         }
         
     }

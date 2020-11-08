@@ -11,7 +11,7 @@ struct SearchByDistanceResponseObject {
     var places: [Place] = []
     
     init(responseData: Any?) {
-        var placesJson: [String: Any?] = [:]
+        let placesJson: [String: Any?] = [:]
         
         // sets placesJson to nested locations data
         
