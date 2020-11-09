@@ -17,12 +17,12 @@ class MapViewController: UIViewController {
     let service = LocationService()
     var getPlacesResponse: SearchByDistanceResponseObject?
     var workoutLocations: [Place] = []
-    var locationRadius = 2 //miles
+    var locationRadius = 25 //miles
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        createMapData()
+        getMapData()
         setUpView()
     }
     
@@ -55,12 +55,6 @@ class MapViewController: UIViewController {
         mapView.showsUserLocation = true
     }
     
-    // MARK: Data Processing
-    private func createMapData() {
-        getMapData()
-        
-    }
-    
     // MARK: Networking
     private func getMapData() {
 
@@ -69,11 +63,10 @@ class MapViewController: UIViewController {
         group.enter()
         // service.getPlacesByDistance(radius: locationRadius)
         // TODO: Switch to normal get request before prod
-        service.getDemoPlacesByDistance(radius: 25) { result in
+        service.getDemoPlacesByDistance(radius: locationRadius) { result in
             switch result {
             case .success(let value):
-                print(value)
-                self.getPlacesResponse = SearchByDistanceResponseObject(responseData: value)
+                self.getPlacesResponse = SearchByDistanceResponseObject(responseData: value as? [String: Any] ?? [:])
             case .failure(let error):
                 print(error)
             }
@@ -81,11 +74,12 @@ class MapViewController: UIViewController {
             group.leave()
         }
         
-        DispatchQueue.main.async {
+        group.notify(queue: DispatchQueue.main, execute: {
+            // MARK: Build places array
             if let workoutPlaces = self.getPlacesResponse?.places {
                 self.workoutLocations = workoutPlaces
             }
-        }
+        })
     }
 
 }
