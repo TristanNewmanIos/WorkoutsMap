@@ -4,6 +4,9 @@
 //
 //  Created by Tristan Newman on 11/6/20.
 //
+// LAT and LONG conversion NOTES:
+// One degree of latitude equals approximately 364,000 feet (69 miles), one minute equals 6,068 feet (1.15 miles), and one-second equals 101 feet.
+// One-degree of longitude equals 288,200 feet (54.6 miles), one minute equals 4,800 feet (0.91 mile), and one second equals 80 feet.
 
 import UIKit
 import MapKit
@@ -15,6 +18,11 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     
     let service = LocationService()
+    
+    // User Default Location Specs
+    let latitudeDegreesOf25Miles = 0.3623188406
+    let longitudeDegreesOf25Miles = 0.457875457875458
+    
     var getPlacesResponse: SearchByDistanceResponseObject?
     var workoutLocations: [Place] = []
     var locationRadius = 25 //miles
@@ -30,8 +38,8 @@ class MapViewController: UIViewController {
     }
     
     private func setUpView() {
+        mapView.delegate = self
         setUpSearchBox()
-        setUpMap()
     }
     
     private func setUpSearchBox() {
@@ -52,7 +60,7 @@ class MapViewController: UIViewController {
     }
     
     private func setUpMap() {
-        mapView.showsUserLocation = true
+
     }
     
     // MARK: Networking
@@ -85,6 +93,19 @@ class MapViewController: UIViewController {
 }
 
 extension MapViewController: UITextFieldDelegate {
-    
+}
+
+extension MapViewController: MKMapViewDelegate {
+    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+        mapView.showsUserLocation = true
+        
+        let latitudeDelta25Miles = CLLocationDegrees(latitudeDegreesOf25Miles)
+        let longitudeDelta25Miles = CLLocationDegrees(longitudeDegreesOf25Miles)
+        let coordinateSpan = MKCoordinateSpan(latitudeDelta: latitudeDelta25Miles, longitudeDelta: longitudeDelta25Miles)
+        let coordinateRegion = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: coordinateSpan)
+        
+        mapView.setCenter(mapView.userLocation.coordinate, animated: true)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
 }
 
