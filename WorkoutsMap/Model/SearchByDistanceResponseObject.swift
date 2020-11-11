@@ -10,13 +10,20 @@ import Foundation
 struct SearchByDistanceResponseObject {
     var places: [Place] = []
     
-    init(responseData: Any?) {
-        let placesJson: [String: Any?] = [:]
+    private enum Key: String {
+        case data
+    }
+    
+    private enum DataKey: String {
+        case location
+    }
+    
+    init(responseData: [String: Any]) {
+        let jsonData: [[String: Any]] = responseData[Key.data.rawValue] as? [[String: Any]] ?? [[:]]
         
         // sets placesJson to nested locations data
-        
-        placesJson.forEach{
-            places.append(Place(json: [$0.key: $0.value]))
+        jsonData.forEach{
+            places.append(Place(json: $0))
         }
     }
 }
