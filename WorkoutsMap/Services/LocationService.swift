@@ -77,5 +77,4 @@ class LocationService: NSObject {
 }
 
 extension LocationService: CLLocationManagerDelegate {
-    
 }

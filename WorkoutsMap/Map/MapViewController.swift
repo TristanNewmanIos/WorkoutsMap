@@ -20,12 +20,16 @@ class MapViewController: UIViewController {
     let service = LocationService()
     
     // User Default Location Specs
-    let latitudeDegreesOf2Miles = 0.02898550724
-    let longitudeDegreesOf2Miles = 0.03663003663
+    let latitudeDegreesOf25Miles = 0.3623188406
+    let longitudeDegreesOf25Miles = 0.457875457875458
+    
+    // Dallas test Location
+    let dallasLatitude = 32.779167
+    let dallasLongitude = -96.808891
     
     var getPlacesResponse: SearchByDistanceResponseObject?
     var workoutLocations: [Place] = []
-    var locationRadius = 2 //miles
+    var locationRadius = 25 //miles
     var currentLocation = CLLocation()
     var mapItems = [MKMapItem]()
     
@@ -37,14 +41,23 @@ class MapViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        setUpMap()
     }
     
     private func setUpView() {
         // Non-delegate map set up
         mapView.delegate = self
-        currentLocation = mapView.userLocation.location ?? CLLocation()
         
         setUpSearchBox()
+        setUpMap()
+    }
+    
+    private func setUpMap() {
+        mapView.showsUserLocation = true
+        
+        if let userLocation = mapView.userLocation.location {
+            currentLocation = userLocation
+        }
     }
     
     private func setUpSearchBox() {
@@ -62,6 +75,7 @@ class MapViewController: UIViewController {
         searchTextField.layer.shadowOffset = .zero
         
         searchTextField.becomeFirstResponder()
+        searchTextField.enablesReturnKeyAutomatically = true
     }
     
     // MARK: Networking
@@ -70,9 +84,7 @@ class MapViewController: UIViewController {
         let group = DispatchGroup()
         
         group.enter()
-        // service.getPlacesByDistance(radius: locationRadius)
-        // TODO: Switch to normal get request before prod
-        service.getDemoPlacesByDistance(radius: locationRadius) { result in
+        service.getPlacesByDistance (radius: locationRadius) { result in
             switch result {
             case .success(let value):
                 self.getPlacesResponse = SearchByDistanceResponseObject(responseData: value as? [String: Any] ?? [:])
@@ -87,8 +99,15 @@ class MapViewController: UIViewController {
             // MARK: Build places array
             if let workoutPlaces = self.getPlacesResponse?.places {
                 self.workoutLocations = workoutPlaces
+                self.updateMapUI(with: self.workoutLocations)
             }
         })
+    }
+    
+    private func updateMapUI(with places: [Place]) {
+        places.forEach {
+            annotateMap(place: $0)
+        }
     }
     
     private func getSearchResults(searchText: String) {
@@ -113,17 +132,25 @@ class MapViewController: UIViewController {
 }
 
 extension MapViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newLength = searchTextField.text?.utf16.count ?? 0 + 1
-
-        // enable search button
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // check for non alpha characters
+        // Count chars
+        let newLength = searchTextField.text?.utf16.count ?? 0
+
         if newLength > 2 {
             guard let searchText = searchTextField.text else {
-                return true
+                return false
             }
             getSearchResults(searchText: searchText)
+            return true
         }
+        
+        return false
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        currentLocation = mapView.userLocation.location ?? CLLocation()
         
         return true
     }
@@ -134,36 +161,42 @@ extension MapViewController: MKMapViewDelegate {
         guard let newMapItem = mapItem else {
             return
         }
+        
         currentLocation = CLLocation(latitude: newMapItem.placemark.coordinate.latitude, longitude: newMapItem.placemark.coordinate.longitude)
-        centerMap(coordinate: currentLocation.coordinate)
-        annotateMap(placemark: newMapItem.placemark)
+        annotateMap(place: Place(latitude: newMapItem.placemark.coordinate.latitude, longitude: newMapItem.placemark.coordinate.longitude, name: newMapItem.placemark.title))
     }
     
     private func centerMap(coordinate: CLLocationCoordinate2D) {
         mapView.setCenter(coordinate, animated: true)
     }
     
-    private func annotateMap(placemark: MKPlacemark) {
+    private func annotateMap(place: Place) {
         // Clear existing pins
         mapView.removeAnnotations(mapView.annotations)
         
         let annotation = MKPointAnnotation()
-        annotation.coordinate = placemark.coordinate
-        annotation.title = placemark.title
+        annotation.coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
+        annotation.title = place.name
         
         mapView.addAnnotation(annotation)
     }
     
-    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
         mapView.showsUserLocation = true
+    }
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        // TODO: Remove centering on dallas
+        currentLocation = CLLocation(latitude: dallasLatitude, longitude: dallasLongitude)
         
-        let latitudeDelta = CLLocationDegrees(latitudeDegreesOf2Miles)
-        let longitudeDelta = CLLocationDegrees(longitudeDegreesOf2Miles)
+        let latitudeDelta = CLLocationDegrees(latitudeDegreesOf25Miles)
+        let longitudeDelta = CLLocationDegrees(longitudeDegreesOf25Miles)
         let coordinateSpan = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
         let coordinateRegion = MKCoordinateRegion(center: currentLocation.coordinate, span: coordinateSpan)
-        
-        centerMap(coordinate: currentLocation.coordinate)
+
         mapView.setRegion(coordinateRegion, animated: true)
     }
-}
+        
+    }
+
 
