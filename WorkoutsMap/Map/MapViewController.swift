@@ -20,12 +20,14 @@ class MapViewController: UIViewController {
     let service = LocationService()
     
     // User Default Location Specs
-    let latitudeDegreesOf25Miles = 0.3623188406
-    let longitudeDegreesOf25Miles = 0.457875457875458
+    let latitudeDegreesOf2Miles = 0.02898550724
+    let longitudeDegreesOf2Miles = 0.03663003663
     
     var getPlacesResponse: SearchByDistanceResponseObject?
     var workoutLocations: [Place] = []
-    var locationRadius = 25 //miles
+    var locationRadius = 2 //miles
+    var currentLocation = CLLocation()
+    var mapItems = [MKMapItem]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +40,10 @@ class MapViewController: UIViewController {
     }
     
     private func setUpView() {
+        // Non-delegate map set up
         mapView.delegate = self
+        currentLocation = mapView.userLocation.location ?? CLLocation()
+        
         setUpSearchBox()
     }
     
@@ -57,10 +62,6 @@ class MapViewController: UIViewController {
         searchTextField.layer.shadowOffset = .zero
         
         searchTextField.becomeFirstResponder()
-    }
-    
-    private func setUpMap() {
-
     }
     
     // MARK: Networking
@@ -89,22 +90,79 @@ class MapViewController: UIViewController {
             }
         })
     }
+    
+    private func getSearchResults(searchText: String) {
+        let group = DispatchGroup()
+        var response: MKLocalSearch.Response?
+        
+        group.enter()
+        service.getSearchResults(for: mapView, searchText: searchText) { result in
+            
+            response = result
+            group.leave()
+        }
+        
+        group.notify(queue: DispatchQueue.main, execute: {
+            if let responseItems = response?.mapItems {
+                self.mapItems = responseItems
+                self.updateLocation(with: self.mapItems.first)
+            }
+        })
+    }
 
 }
 
 extension MapViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newLength = searchTextField.text?.utf16.count ?? 0 + 1
+
+        // enable search button
+        // check for non alpha characters
+        if newLength > 2 {
+            guard let searchText = searchTextField.text else {
+                return true
+            }
+            getSearchResults(searchText: searchText)
+        }
+        
+        return true
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
+    private func updateLocation(with mapItem: MKMapItem?) {
+        guard let newMapItem = mapItem else {
+            return
+        }
+        currentLocation = CLLocation(latitude: newMapItem.placemark.coordinate.latitude, longitude: newMapItem.placemark.coordinate.longitude)
+        centerMap(coordinate: currentLocation.coordinate)
+        annotateMap(placemark: newMapItem.placemark)
+    }
+    
+    private func centerMap(coordinate: CLLocationCoordinate2D) {
+        mapView.setCenter(coordinate, animated: true)
+    }
+    
+    private func annotateMap(placemark: MKPlacemark) {
+        // Clear existing pins
+        mapView.removeAnnotations(mapView.annotations)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = placemark.coordinate
+        annotation.title = placemark.title
+        
+        mapView.addAnnotation(annotation)
+    }
+    
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         mapView.showsUserLocation = true
         
-        let latitudeDelta25Miles = CLLocationDegrees(latitudeDegreesOf25Miles)
-        let longitudeDelta25Miles = CLLocationDegrees(longitudeDegreesOf25Miles)
-        let coordinateSpan = MKCoordinateSpan(latitudeDelta: latitudeDelta25Miles, longitudeDelta: longitudeDelta25Miles)
-        let coordinateRegion = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: coordinateSpan)
+        let latitudeDelta = CLLocationDegrees(latitudeDegreesOf2Miles)
+        let longitudeDelta = CLLocationDegrees(longitudeDegreesOf2Miles)
+        let coordinateSpan = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
+        let coordinateRegion = MKCoordinateRegion(center: currentLocation.coordinate, span: coordinateSpan)
         
-        mapView.setCenter(mapView.userLocation.coordinate, animated: true)
+        centerMap(coordinate: currentLocation.coordinate)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 }

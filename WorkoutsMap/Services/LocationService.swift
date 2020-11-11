@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 import CoreLocation
+import MapKit
 
 class LocationService: NSObject {
     
@@ -60,6 +61,18 @@ class LocationService: NSObject {
             completion(response.result)
         }
         
+    }
+    
+    func getSearchResults(for mapView: MKMapView, searchText: String, completion: @escaping (MKLocalSearch.Response?) -> Void)  {
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = searchText
+        request.region = mapView.region
+        
+        let search = MKLocalSearch(request: request)
+        
+        search.start { response, _ in
+           completion(response)
+        }
     }
 }
 
