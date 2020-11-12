@@ -23,12 +23,8 @@ class MapViewController: UIViewController {
     let latitudeDegreesOf25Miles = 0.3623188406
     let longitudeDegreesOf25Miles = 0.457875457875458
     
-    // Dallas test Location
-    let dallasLatitude = 32.779167
-    let dallasLongitude = -96.808891
-    
     var getPlacesResponse: SearchByDistanceResponseObject?
-    var workoutLocations: [Place] = []
+    var workoutPlaces: [Place] = []
     var locationRadius = 25 //miles
     var currentLocation = CLLocation()
     var mapItems = [MKMapItem]()
@@ -41,9 +37,10 @@ class MapViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         setUpMap()
-        getMapData()
+        getWorkoutData()
     }
     
+    // MARK: UI
     private func setUpView() {
         // Non-delegate map set up
         mapView.delegate = self
@@ -78,8 +75,9 @@ class MapViewController: UIViewController {
         searchTextField.enablesReturnKeyAutomatically = true
     }
     
+    
     // MARK: Networking
-    private func getMapData() {
+    private func getWorkoutData() {
 
         let group = DispatchGroup()
         
@@ -91,26 +89,21 @@ class MapViewController: UIViewController {
             switch result {
             case .success(let value):
                 self.getPlacesResponse = SearchByDistanceResponseObject(responseData: value as? [String: Any] ?? [:])
+                if let newWorkoutPlaces = self.getPlacesResponse?.places {
+                    self.workoutPlaces = newWorkoutPlaces
+                }
+                group.leave()
             case .failure(let error):
                 print(error)
+                group.leave()
             }
             
-            group.leave()
         }
         
         group.notify(queue: DispatchQueue.main, execute: {
             // MARK: Build places array
-            if let workoutPlaces = self.getPlacesResponse?.places {
-                self.workoutLocations = workoutPlaces
-                self.annotateMapUI(with: self.workoutLocations)
-            }
+            self.annotateMap(places: self.workoutPlaces)
         })
-    }
-    
-    private func annotateMapUI(with places: [Place]) {
-        places.forEach {
-            annotateMap(place: $0)
-        }
     }
     
     private func getSearchResults(searchText: String) {
@@ -134,10 +127,11 @@ class MapViewController: UIViewController {
 
 }
 
+// MARK: Map Delegate
 extension MapViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // check for non alpha characters
+        // TODO: check for non alpha numeric characters, replace with ""
         // Count chars
         let newLength = searchTextField.text?.utf16.count ?? 0
 
@@ -146,6 +140,8 @@ extension MapViewController: UITextFieldDelegate {
                 return false
             }
             getSearchResults(searchText: searchText)
+            getWorkoutData()
+            textField.resignFirstResponder()
             return true
         }
         
@@ -166,31 +162,30 @@ extension MapViewController: MKMapViewDelegate {
         }
         
         currentLocation = CLLocation(latitude: newMapItem.placemark.coordinate.latitude, longitude: newMapItem.placemark.coordinate.longitude)
-        annotateMap(place: Place(latitude: newMapItem.placemark.coordinate.latitude, longitude: newMapItem.placemark.coordinate.longitude, name: newMapItem.placemark.title))
+        centerMap(coordinate: currentLocation.coordinate)
     }
     
     private func centerMap(coordinate: CLLocationCoordinate2D) {
         mapView.setCenter(coordinate, animated: true)
     }
     
-    private func annotateMap(place: Place) {
+    private func annotateMap(places: [Place]) {
+        var annotations = [MKPointAnnotation]()
+        
         // Clear existing pins
         mapView.removeAnnotations(mapView.annotations)
         
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
-        annotation.title = place.name
+        places.forEach{
+            let newAnnotation = MKPointAnnotation()
+            newAnnotation.coordinate = CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+            newAnnotation.title = $0.name
+            annotations.append(newAnnotation)
+        }
         
-        mapView.addAnnotation(annotation)
-    }
-    
-    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
-        mapView.showsUserLocation = true
+        mapView.addAnnotations(annotations)
     }
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        // TODO: Remove centering on dallas
-//        currentLocation = CLLocation(latitude: dallasLatitude, longitude: dallasLongitude)
         guard let userNewLocation = mapView.userLocation.location else { return }
         currentLocation = userNewLocation
         
@@ -201,9 +196,8 @@ extension MapViewController: MKMapViewDelegate {
 
         mapView.setRegion(coordinateRegion, animated: true)
         
-        
     }
         
-    }
+}
 
 
