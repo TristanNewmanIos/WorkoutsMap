@@ -45,8 +45,8 @@ class LocationService: NSObject {
         return nil
     }
     
-    func getPlacesByDistance(radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
-        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=\(usersLocation?.latitude)&lon=\(usersLocation?.longitude)&radius=\(radius)"
+    func getPlacesByDistance(from place: Place, radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
+        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=\(place.latitude)&lon=\(place.longitude)&radius=\(radius)"
         
         AF.request(requestURLString).validate().responseJSON { response in
             completion(response.result)

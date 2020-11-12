@@ -36,12 +36,12 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getMapData()
         setUpView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         setUpMap()
+        getMapData()
     }
     
     private func setUpView() {
@@ -84,7 +84,10 @@ class MapViewController: UIViewController {
         let group = DispatchGroup()
         
         group.enter()
-        service.getPlacesByDistance (radius: locationRadius) { result in
+        service.getPlacesByDistance (from: Place(
+                                        latitude: currentLocation.coordinate.latitude,
+                                        longitude: currentLocation.coordinate.longitude,
+                                        name: nil),radius: locationRadius) { result in
             switch result {
             case .success(let value):
                 self.getPlacesResponse = SearchByDistanceResponseObject(responseData: value as? [String: Any] ?? [:])
@@ -99,12 +102,12 @@ class MapViewController: UIViewController {
             // MARK: Build places array
             if let workoutPlaces = self.getPlacesResponse?.places {
                 self.workoutLocations = workoutPlaces
-                self.updateMapUI(with: self.workoutLocations)
+                self.annotateMapUI(with: self.workoutLocations)
             }
         })
     }
     
-    private func updateMapUI(with places: [Place]) {
+    private func annotateMapUI(with places: [Place]) {
         places.forEach {
             annotateMap(place: $0)
         }
@@ -187,7 +190,9 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         // TODO: Remove centering on dallas
-        currentLocation = CLLocation(latitude: dallasLatitude, longitude: dallasLongitude)
+//        currentLocation = CLLocation(latitude: dallasLatitude, longitude: dallasLongitude)
+        guard let userNewLocation = mapView.userLocation.location else { return }
+        currentLocation = userNewLocation
         
         let latitudeDelta = CLLocationDegrees(latitudeDegreesOf25Miles)
         let longitudeDelta = CLLocationDegrees(longitudeDegreesOf25Miles)
@@ -195,6 +200,8 @@ extension MapViewController: MKMapViewDelegate {
         let coordinateRegion = MKCoordinateRegion(center: currentLocation.coordinate, span: coordinateSpan)
 
         mapView.setRegion(coordinateRegion, animated: true)
+        
+        
     }
         
     }
