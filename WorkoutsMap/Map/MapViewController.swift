@@ -51,7 +51,8 @@ class MapViewController: UIViewController {
     }
     
     private func setUpKeyboardDismissOverlay() {
-        
+        let tapGesture = GestureRecognizer
+        dismissKeyboardOverlay.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
     }
     
     private func setUpMap() {
