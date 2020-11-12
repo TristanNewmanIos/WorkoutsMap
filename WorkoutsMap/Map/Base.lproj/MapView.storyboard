@@ -17,6 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7t-kZ-Imz" userLabel="Overlay">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="tXa-Ad-LqJ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </mapView>
@@ -34,16 +38,21 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="z7t-kZ-Imz" secondAttribute="trailing" id="CvH-4f-cJe"/>
                             <constraint firstItem="tXa-Ad-LqJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GW3-pE-GwC"/>
+                            <constraint firstAttribute="bottom" secondItem="z7t-kZ-Imz" secondAttribute="bottom" id="ITL-lx-dgf"/>
                             <constraint firstItem="tXa-Ad-LqJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Oyi-v0-hIK"/>
                             <constraint firstItem="gst-D1-SxU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="11" id="SYX-jH-EQB"/>
+                            <constraint firstItem="z7t-kZ-Imz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="TCX-gN-6m8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gst-D1-SxU" secondAttribute="trailing" constant="5" id="U3j-q8-tO1"/>
                             <constraint firstItem="tXa-Ad-LqJ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fmY-rR-axl"/>
+                            <constraint firstItem="z7t-kZ-Imz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="g73-7e-8Uy"/>
                             <constraint firstAttribute="bottom" secondItem="tXa-Ad-LqJ" secondAttribute="bottom" id="j9z-ce-VJ3"/>
                             <constraint firstItem="gst-D1-SxU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="5" id="mNh-Va-9og"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="dismissKeyboardOverlay" destination="z7t-kZ-Imz" id="tPS-VS-xYV"/>
                         <outlet property="mapView" destination="tXa-Ad-LqJ" id="NdT-D6-xTz"/>
                         <outlet property="searchTextField" destination="gst-D1-SxU" id="GU9-hx-eAy"/>
                     </connections>

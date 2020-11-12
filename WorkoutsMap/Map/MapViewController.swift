@@ -16,6 +16,7 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var dismissKeyboardOverlay: UIView!
     
     let service = LocationService()
     
@@ -47,6 +48,10 @@ class MapViewController: UIViewController {
         
         setUpSearchBox()
         setUpMap()
+    }
+    
+    private func setUpKeyboardDismissOverlay() {
+        
     }
     
     private func setUpMap() {
