@@ -28,3 +28,7 @@ Bright and Beautiful Future:
 * Opening map app prompts when placemarker on the map is touch ("Would you like to open Google Maps?")
 * Error alerts for various status codes ("Something went wrong. Please check your connection", "Something happened on our end. Please try again later.")
 * Alerts for empty workout results ("There doesn't seem to be workouts near this location")
+
+Design and Development Resources:
+* Architecture: https://lucid.app/lucidchart/ef5a5b92-37c5-46a7-8a65-61a242931c8e/edit?beaconFlowId=C480992D96AAC96D&page=0_0#?folder_id=home&browser=icon
+* Design: https://www.figma.com/file/E9uF9Y8GIbZ5XWKECREXLI/Camp-Gladiator-Colors?node-id=0%3A1
