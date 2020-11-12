@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 import CoreLocation
+import MapKit
 
 class LocationService: NSObject {
     
@@ -44,8 +45,8 @@ class LocationService: NSObject {
         return nil
     }
     
-    func getPlacesByDistance(radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
-        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=\(usersLocation?.latitude)&lon=\(usersLocation?.longitude)&radius=\(radius)"
+    func getPlacesByDistance(from place: Place, radius: Int, completion: @escaping (Result<Any, AFError>) -> Void) {
+        let requestURLString = baseURLString + getPlacesByDistanceExtension + "lat=\(place.latitude)&lon=\(place.longitude)&radius=\(radius)"
         
         AF.request(requestURLString).validate().responseJSON { response in
             completion(response.result)
@@ -61,8 +62,19 @@ class LocationService: NSObject {
         }
         
     }
+    
+    func getSearchResults(for mapView: MKMapView, searchText: String, completion: @escaping (MKLocalSearch.Response?) -> Void)  {
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = searchText
+        request.region = mapView.region
+        
+        let search = MKLocalSearch(request: request)
+        
+        search.start { response, _ in
+           completion(response)
+        }
+    }
 }
 
 extension LocationService: CLLocationManagerDelegate {
-    
 }

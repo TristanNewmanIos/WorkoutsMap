@@ -24,22 +24,37 @@ class MapViewController: UIViewController {
     let longitudeDegreesOf25Miles = 0.457875457875458
     
     var getPlacesResponse: SearchByDistanceResponseObject?
-    var workoutLocations: [Place] = []
+    var workoutPlaces: [Place] = []
     var locationRadius = 25 //miles
+    var currentLocation = CLLocation()
+    var mapItems = [MKMapItem]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getMapData()
         setUpView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        setUpMap()
+        getWorkoutData()
     }
     
+    // MARK: UI
     private func setUpView() {
+        // Non-delegate map set up
         mapView.delegate = self
+        
         setUpSearchBox()
+        setUpMap()
+    }
+    
+    private func setUpMap() {
+        mapView.showsUserLocation = true
+        
+        if let userLocation = mapView.userLocation.location {
+            currentLocation = userLocation
+        }
     }
     
     private func setUpSearchBox() {
@@ -57,55 +72,132 @@ class MapViewController: UIViewController {
         searchTextField.layer.shadowOffset = .zero
         
         searchTextField.becomeFirstResponder()
+        searchTextField.enablesReturnKeyAutomatically = true
     }
     
-    private func setUpMap() {
-
-    }
     
     // MARK: Networking
-    private func getMapData() {
+    private func getWorkoutData() {
 
         let group = DispatchGroup()
         
         group.enter()
-        // service.getPlacesByDistance(radius: locationRadius)
-        // TODO: Switch to normal get request before prod
-        service.getDemoPlacesByDistance(radius: locationRadius) { result in
+        service.getPlacesByDistance (from: Place(
+                                        latitude: currentLocation.coordinate.latitude,
+                                        longitude: currentLocation.coordinate.longitude,
+                                        name: nil),radius: locationRadius) { result in
             switch result {
             case .success(let value):
                 self.getPlacesResponse = SearchByDistanceResponseObject(responseData: value as? [String: Any] ?? [:])
+                if let newWorkoutPlaces = self.getPlacesResponse?.places {
+                    self.workoutPlaces = newWorkoutPlaces
+                }
+                group.leave()
             case .failure(let error):
                 print(error)
+                group.leave()
             }
             
-            group.leave()
         }
         
         group.notify(queue: DispatchQueue.main, execute: {
             // MARK: Build places array
-            if let workoutPlaces = self.getPlacesResponse?.places {
-                self.workoutLocations = workoutPlaces
+            self.annotateMap(places: self.workoutPlaces)
+        })
+    }
+    
+    private func getSearchResults(searchText: String) {
+        let group = DispatchGroup()
+        var response: MKLocalSearch.Response?
+        
+        group.enter()
+        service.getSearchResults(for: mapView, searchText: searchText) { result in
+            
+            response = result
+            group.leave()
+        }
+        
+        group.notify(queue: DispatchQueue.main, execute: {
+            if let responseItems = response?.mapItems {
+                self.mapItems = responseItems
+                self.updateLocation(with: self.mapItems.first)
             }
         })
     }
 
 }
 
+// MARK: Map Delegate
 extension MapViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // TODO: check for non alpha numeric characters, replace with ""
+        // Count chars
+        let newLength = searchTextField.text?.utf16.count ?? 0
+
+        if newLength > 2 {
+            guard let searchText = searchTextField.text else {
+                return false
+            }
+            getSearchResults(searchText: searchText)
+            getWorkoutData()
+            textField.resignFirstResponder()
+            return true
+        }
+        
+        return false
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        currentLocation = mapView.userLocation.location ?? CLLocation()
+        
+        return true
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
-    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-        mapView.showsUserLocation = true
+    private func updateLocation(with mapItem: MKMapItem?) {
+        guard let newMapItem = mapItem else {
+            return
+        }
         
-        let latitudeDelta25Miles = CLLocationDegrees(latitudeDegreesOf25Miles)
-        let longitudeDelta25Miles = CLLocationDegrees(longitudeDegreesOf25Miles)
-        let coordinateSpan = MKCoordinateSpan(latitudeDelta: latitudeDelta25Miles, longitudeDelta: longitudeDelta25Miles)
-        let coordinateRegion = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: coordinateSpan)
-        
-        mapView.setCenter(mapView.userLocation.coordinate, animated: true)
-        mapView.setRegion(coordinateRegion, animated: true)
+        currentLocation = CLLocation(latitude: newMapItem.placemark.coordinate.latitude, longitude: newMapItem.placemark.coordinate.longitude)
+        centerMap(coordinate: currentLocation.coordinate)
     }
+    
+    private func centerMap(coordinate: CLLocationCoordinate2D) {
+        mapView.setCenter(coordinate, animated: true)
+    }
+    
+    private func annotateMap(places: [Place]) {
+        var annotations = [MKPointAnnotation]()
+        
+        // Clear existing pins
+        mapView.removeAnnotations(mapView.annotations)
+        
+        places.forEach{
+            let newAnnotation = MKPointAnnotation()
+            newAnnotation.coordinate = CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+            newAnnotation.title = $0.name
+            annotations.append(newAnnotation)
+        }
+        
+        mapView.addAnnotations(annotations)
+    }
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        guard let userNewLocation = mapView.userLocation.location else { return }
+        currentLocation = userNewLocation
+        
+        let latitudeDelta = CLLocationDegrees(latitudeDegreesOf25Miles)
+        let longitudeDelta = CLLocationDegrees(longitudeDegreesOf25Miles)
+        let coordinateSpan = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
+        let coordinateRegion = MKCoordinateRegion(center: currentLocation.coordinate, span: coordinateSpan)
+
+        mapView.setRegion(coordinateRegion, animated: true)
+        
+    }
+        
 }
+
 
