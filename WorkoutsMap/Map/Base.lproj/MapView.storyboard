@@ -17,13 +17,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7t-kZ-Imz" userLabel="Overlay">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="tXa-Ad-LqJ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7t-kZ-Imz" userLabel="Overlay">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search here" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="gst-D1-SxU">
                                 <rect key="frame" x="25" y="55" width="364" height="45"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -38,17 +38,17 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="z7t-kZ-Imz" secondAttribute="trailing" id="CvH-4f-cJe"/>
+                            <constraint firstAttribute="bottom" secondItem="z7t-kZ-Imz" secondAttribute="bottom" id="1Z3-39-44v"/>
+                            <constraint firstItem="z7t-kZ-Imz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="3BZ-TP-6dD"/>
+                            <constraint firstItem="z7t-kZ-Imz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FdW-xh-NcX"/>
                             <constraint firstItem="tXa-Ad-LqJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GW3-pE-GwC"/>
-                            <constraint firstAttribute="bottom" secondItem="z7t-kZ-Imz" secondAttribute="bottom" id="ITL-lx-dgf"/>
                             <constraint firstItem="tXa-Ad-LqJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Oyi-v0-hIK"/>
                             <constraint firstItem="gst-D1-SxU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="11" id="SYX-jH-EQB"/>
-                            <constraint firstItem="z7t-kZ-Imz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="TCX-gN-6m8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gst-D1-SxU" secondAttribute="trailing" constant="5" id="U3j-q8-tO1"/>
                             <constraint firstItem="tXa-Ad-LqJ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fmY-rR-axl"/>
-                            <constraint firstItem="z7t-kZ-Imz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="g73-7e-8Uy"/>
                             <constraint firstAttribute="bottom" secondItem="tXa-Ad-LqJ" secondAttribute="bottom" id="j9z-ce-VJ3"/>
                             <constraint firstItem="gst-D1-SxU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="5" id="mNh-Va-9og"/>
+                            <constraint firstItem="z7t-kZ-Imz" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="xNL-sI-k87"/>
                         </constraints>
                     </view>
                     <connections>
