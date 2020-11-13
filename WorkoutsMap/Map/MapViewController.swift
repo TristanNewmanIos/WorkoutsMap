@@ -16,6 +16,7 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var dismissKeyboardOverlay: UIView!
     
     let service = LocationService()
     
@@ -32,12 +33,11 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUpView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setUpMap()
-        getWorkoutData()
+        setUpView()
+        
     }
     
     // MARK: UI
@@ -47,6 +47,13 @@ class MapViewController: UIViewController {
         
         setUpSearchBox()
         setUpMap()
+        setUpKeyboardDismissOverlay()
+        getWorkoutData()
+    }
+    
+    private func setUpKeyboardDismissOverlay() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardDismissOverlayTapped))
+        dismissKeyboardOverlay.addGestureRecognizer(tapGesture)
     }
     
     private func setUpMap() {
@@ -73,6 +80,11 @@ class MapViewController: UIViewController {
         
         searchTextField.becomeFirstResponder()
         searchTextField.enablesReturnKeyAutomatically = true
+    }
+    
+    @objc func keyboardDismissOverlayTapped() {
+        dismissKeyboardOverlay.isHidden = true
+        searchTextField.resignFirstResponder()
     }
     
     
@@ -152,6 +164,10 @@ extension MapViewController: UITextFieldDelegate {
         currentLocation = mapView.userLocation.location ?? CLLocation()
         
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        dismissKeyboardOverlay.isHidden = false
     }
 }
 
